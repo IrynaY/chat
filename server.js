@@ -15,6 +15,7 @@ app.use(express.static('./public'));
 
 io.on('connection', function (socket) {
   socket.username = moniker.choose();
+
   socket.emit('set username', {
     name: socket.username,
     timestamp: new Date().getTime(),
@@ -26,11 +27,13 @@ io.on('connection', function (socket) {
   });
 
   socket.on('chat message', (message) => {
-    io.emit('chat message', {
+    const answer = {
       message,
-      name: socket.username,
-      timestamp: new Date().getTime(),
-    });
+      timestamp: new Date().getTime()
+    };
+    socket.emit('self', answer);
+    answer.name =  socket.username;
+    socket.broadcast.emit('chat message', answer);
   });
 
   socket.on('disconnect', () => {
@@ -39,6 +42,19 @@ io.on('connection', function (socket) {
       timestamp: new Date().getTime(),
     });
   });
+
+  socket.on('typing', () => {
+    socket.broadcast.emit('typing', {
+      name: socket.username
+    });
+  });
+
+  socket.on('stop typing', () => {
+    socket.broadcast.emit('stop typing', {
+      name: socket.username
+    });
+  });
+
 });
 
 server.listen(port, () => {

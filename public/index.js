@@ -29,4 +29,21 @@ document.addEventListener('DOMContentLoaded', () => {
   socket.onChatMessage( ({name, message, timestamp}) => {
     messages.renderMessage(name, message, timestamp);
   });
+
+  socket.onSelf( ({message, timestamp}) => {
+    messages.renderMessage('ME', message, timestamp);
+  });
+
+  messageForm.onFocus( () => {
+    socket.emitTyping();
+  });
+
+  messageForm.onBlur( () => {
+    socket.emitStopTyping();
+  });
+
+  socket.onTyping( ({name}) => {
+    console.log('onTyping', name);
+  });
+
 });
