@@ -13,8 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const typingMessage = new TypingMessage('#typing');
   const usersList = new UsersList('#user-list');
 
-  socket.onSetUsername( ({name, timestamp}) => {
+  socket.onSetUsername( ({name, timestamp, userList}) => {
     username.render(name);
+    usersList.render(userList);
     messages.renderSystemMessage(`${name} assigned to you.`, timestamp);
   });
 

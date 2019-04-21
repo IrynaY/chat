@@ -22,6 +22,7 @@ io.on('connection', function (socket) {
   socket.emit('set username', {
     name: socket.username,
     timestamp: new Date().getTime(),
+    userList: users
   });
 
   socket.broadcast.emit('user joined', {
