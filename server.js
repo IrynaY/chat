@@ -13,8 +13,11 @@ app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
 
 app.use(express.static('./public'));
 
+const users = [];
+
 io.on('connection', function (socket) {
-  socket.username = moniker.choose();
+  socket.username = moniker.choose();  
+  users.push(socket.username);
 
   socket.emit('set username', {
     name: socket.username,
@@ -24,6 +27,7 @@ io.on('connection', function (socket) {
   socket.broadcast.emit('user joined', {
     name: socket.username,
     timestamp: new Date().getTime(),
+    userList: users
   });
 
   socket.on('chat message', (message) => {
@@ -37,9 +41,11 @@ io.on('connection', function (socket) {
   });
 
   socket.on('disconnect', () => {
+    users.splice(users.indexOf(socket.username), 1);
     socket.broadcast.emit('user left', {
       name: socket.username,
       timestamp: new Date().getTime(),
+      userList: users
     });
   });
 

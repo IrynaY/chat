@@ -39,4 +39,8 @@ export class Socket {
   onTyping = handler => {
     this.socket.on('typing', handler)
   }
+
+  onStopTyping = handler => {
+    this.socket.on('stop typing', handler)
+  }
 }
