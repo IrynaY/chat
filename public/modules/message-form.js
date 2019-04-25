@@ -15,15 +15,6 @@ export class MessageForm {
     })
   }
 
-  onFocus = handler => {
-    this.input.addEventListener('focus', event => {
-      handler();
-    })
-  }
-
-  onBlur = handler => {
-    this.input.addEventListener('blur', event => {
-      handler();
-    })
-  }
+  onKeyDown = handler => this.input.addEventListener('keydown', () => handler());
+  onKeyUp = handler => this.input.addEventListener('keyup', () => handler());
 }
